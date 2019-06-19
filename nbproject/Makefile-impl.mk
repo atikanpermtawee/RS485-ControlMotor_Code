@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=RS485-ControlMotor_Code.X
+PROJECTNAME=RS485-ControlMotor_Code
 
 # Active Configuration
 DEFAULTCONF=default

@@ -116,15 +116,15 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         {
             Count_Time.Time_10ms = 0;
             Flag_Time.Time_10ms = 1;
+            if(--Count_Value.Comman_Relay==0)
+            {
+                Relay_A_SetLow();
+                Relay_B_SetLow();
+            }
             if(++Count_Time.Time_100ms >= 10)
             {
                 Count_Time.Time_100ms = 0;
                 Flag_Time.Time_100ms = 1;
-                if(--Count_Value.Comman_Relay==0)
-                {
-                    Relay_A_SetLow();
-                    Relay_B_SetLow();
-                }
                 if(++Count_Time.Time_500ms >= 5)
                 {
                     Count_Time.Time_500ms = 0;
@@ -177,7 +177,7 @@ void __interrupt() INTERRUPT_InterruptManager (void)
                     Buff_Data[4] = Keep_data[5];
                     Buff_Data[5] = Keep_data[6];
                     Cal_CRC = RTU_CalculateChecksum(&Buff_Data,4);
-                    Chack_Sum = (Keep_data[5]<<8)|Keep_data[6];
+                    Chack_Sum = (Keep_data[6]<<8)|Keep_data[5];
                     if(Cal_CRC == Chack_Sum)
                     {
                         success = 1;
@@ -192,11 +192,9 @@ void __interrupt() INTERRUPT_InterruptManager (void)
                 head = 0;
             }
         } 
-        else
-        {
-            //Unhandled Interrupt
-        }
-    }      
+    } 
+    
+         
 }
 
 void Chack_ID_Device(void)
@@ -228,13 +226,13 @@ void Control_Relay(void)
     {
         Relay_A_SetHigh();
         Relay_B_SetLow(); 
-        Count_Value.Comman_Relay = 5; //count time on relay 500mS
+        Count_Value.Comman_Relay = 100; //count time on relay 1S
     }
     else if(!Flag_Value.Relay)
     {
         Relay_A_SetLow();
         Relay_B_SetHigh();
-        Count_Value.Comman_Relay = 5; //count time on relay 500mS
+        Count_Value.Comman_Relay = 100; //count time on relay 1S
     }
 }
 
